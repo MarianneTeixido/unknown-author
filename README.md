@@ -1,2 +1,1 @@
-# unknown-author-
-Meta - imágenes cartográficas.
+# Unkown Author
