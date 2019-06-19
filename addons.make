@@ -1,1 +1,1 @@
-ofxGui
+ofxOsc
