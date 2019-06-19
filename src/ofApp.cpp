@@ -34,6 +34,7 @@ void ofApp::setup(){
   posZinAeforia = 2;
   posZfinAeforia = 2;
   startTimeAeforia = ofGetElapsedTimeMillis(); 
+  iniTimeDrawAeforia = ofGetElapsedTimeMillis();
   
   timeAitana = 10000;
   posXinAitana = 0;
@@ -43,7 +44,8 @@ void ofApp::setup(){
   posZinAitana = 2;
   posZfinAitana = 2;
   startTimeAitana = ofGetElapsedTimeMillis();
-
+ iniTimeDrawAitana = ofGetElapsedTimeMillis();
+ 
   timeCatelloo = 10000;
   posXinCatelloo = 0;
   posXfinCatelloo = 0;
@@ -52,7 +54,8 @@ void ofApp::setup(){
   posZinCatelloo = 2;
   posZfinCatelloo = 2;
   startTimeCatelloo = ofGetElapsedTimeMillis();
-
+  iniTimeDrawCatelloo = ofGetElapsedTimeMillis();
+ 
   // aeforia
   
   std::vector < std::string > filasAeforia = ofSplitString(bufferAeforia.getText(), " ");
@@ -65,7 +68,7 @@ void ofApp::setup(){
     planosAeforia[i].resizeToTexture( aeforia[i].getTexture() );
   }
 
-  // aitana
+   // aitana
   
   std::vector < std::string > filasAitana = ofSplitString(bufferAitana.getText(), " ");
 
@@ -173,9 +176,10 @@ void ofApp::update(){
     // Aeforia
 
     if (m.getAddress() == "/aeforia"){
+
       if(m.getArgAsString(0) == "draw"  && m.getNumArgs() == 1){
 	aeforiaON = 1;
-	string oldpost = "draw: Aeforia";
+	string oldpost = "aeforia: draw";
 	post = oldpost + "\n" + post;
 	//inittimeDrawAeforia = ofGetElapsedTimeMillis();
 	//aeforiaFadeIni = 255;
@@ -191,11 +195,11 @@ void ofApp::update(){
 	//inittimeDrawAeforia = ofGetElapsedTimeMillis();
 	//ofSleepMillis(500);
 	aeforiaON = 0;
-	string oldpost = "clear: aeforia";
+	string oldpost = "aeforia: clear";
 	post = oldpost + "\n" + post;
       }
       
-      if(m.getArgAsString(0) == "setPosition"  && m.getNumArgs() == 8){
+      if(m.getArgAsString(0) == "setTransition"  && m.getNumArgs() == 8){
 	timeAeforia = m.getArgAsFloat(1);
 	posXinAeforia = m.getArgAsInt(2);
 	posXfinAeforia = m.getArgAsInt(3);
@@ -204,27 +208,46 @@ void ofApp::update(){
 	posZinAeforia = m.getArgAsInt(6);
 	posZfinAeforia = m.getArgAsInt(7);
 	rampONAeforia = 1;
-	startTimeAeforia = ofGetElapsedTimeMillis(); 
+	startTimeAeforia = ofGetElapsedTimeMillis();
+	string oldpost = "aeforia: X axis from column " + ofToString(m.getArgAsInt(2) + 1) + " to column " + ofToString(m.getArgAsInt(3)+1);
+	post = oldpost + "\n" + post;
+	//	ofSleepMillis(timerAeforia);
+	// rampONAeforia = 0; 
       }
-      if(m.getArgAsString(0) == "opacity" && m.getNumArgs() == 2){
-	opacidadAeforia = m.getArgAsFloat(1); 
+
+      if(m.getArgAsString(0) == "opacity" && m.getNumArgs() == 4){
+	iniTimeDrawAeforia = ofGetElapsedTimeMillis();
+	opaTimeAeforia = m.getArgAsFloat(1);
+	opaIniAeforia = m.getArgAsFloat(2);
+	opaFiniAeforia = m.getArgAsFloat(3);
+	rampOpaAeforia = 1; 
       }
+
+      if(m.getArgAsString(0) == "scale" && m.getNumArgs() == 2){
+	for (int i = 0;i < LIM1;i++){
+	planosAeforia[i].set(m.getArgAsFloat(1)*100, m.getArgAsFloat(1)*100);
+	}
+      }
+      
     }
 
     // Aitana
     
     if (m.getAddress() == "/aitana"){
+
       if(m.getArgAsString(0) == "draw"  && m.getNumArgs() == 1){
 	aitanaON = 1;
-	string oldpost = "draw: aitana_basquiat";
+	string oldpost = "aitana_basquiat: draw";
 	post = oldpost + "\n" + post;
       }
+      
       if(m.getArgAsString(0) == "clear"  && m.getNumArgs() == 1){
 	aitanaON = 0;
-	string oldpost = "clear: aitana_basquiat";
+	string oldpost = "aitana_basquiat: clear";
 	post = oldpost + "\n" + post;
       }
-      if(m.getArgAsString(0) == "setPosition"  && m.getNumArgs() == 8){
+      
+      if(m.getArgAsString(0) == "setTransition"  && m.getNumArgs() == 8){
 	timeAitana = m.getArgAsFloat(1);
 	posXinAitana = m.getArgAsInt(2);
 	posXfinAitana = m.getArgAsInt(3);
@@ -233,27 +256,44 @@ void ofApp::update(){
 	posZinAitana = m.getArgAsInt(6);
 	posZfinAitana = m.getArgAsInt(7);
 	rampONAitana = 1;
-	startTimeAitana = ofGetElapsedTimeMillis(); 
+	startTimeAitana = ofGetElapsedTimeMillis();
+	string oldpost = "aitana_basquiat: X axis from column " + ofToString(m.getArgAsInt(2) + 1) + " to column " + ofToString(m.getArgAsInt(3)+1);
+	post = oldpost + "\n" + post;
       }
-      if(m.getArgAsString(0) == "opacity" && m.getNumArgs() == 2){
-	opacidadAitana = m.getArgAsFloat(1); 
+
+      if(m.getArgAsString(0) == "opacity" && m.getNumArgs() == 4){
+	iniTimeDrawAitana = ofGetElapsedTimeMillis();
+	opaTimeAitana = m.getArgAsFloat(1);
+	opaIniAitana = m.getArgAsFloat(2);
+	opaFiniAitana = m.getArgAsFloat(3);
+	rampOpaAitana = 1; 
       }
+
+      if(m.getArgAsString(0) == "scale" && m.getNumArgs() == 2){
+	for (int i = 0;i < LIM1;i++){
+	  planosAitana[i].set(m.getArgAsFloat(1)*100, m.getArgAsFloat(1)*100);
+	}
+      }
+      
     }
 
     // Catelloo
     
     if (m.getAddress() == "/catelloo"){
+
       if(m.getArgAsString(0) == "draw"  && m.getNumArgs() == 1){
 	catellooON = 1;
-	string oldpost = "draw: catelloo";
+	string oldpost = "catelloo: draw";
 	post = oldpost + "\n" + post;
       }
+      
       if(m.getArgAsString(0) == "clear"  && m.getNumArgs() == 1){
 	catellooON = 0;
-	string oldpost = "clear: catelloo";
+	string oldpost = "catelloo: clear";
 	post = oldpost + "\n" + post;
       }
-      if(m.getArgAsString(0) == "setPosition"  && m.getNumArgs() == 8){
+      
+      if(m.getArgAsString(0) == "setTransition"  && m.getNumArgs() == 8){
 	timeCatelloo = m.getArgAsFloat(1);
 	posXinCatelloo = m.getArgAsInt(2);
 	posXfinCatelloo = m.getArgAsInt(3);
@@ -262,11 +302,25 @@ void ofApp::update(){
 	posZinCatelloo = m.getArgAsInt(6);
 	posZfinCatelloo = m.getArgAsInt(7);
 	rampONCatelloo = 1;
-	startTimeCatelloo = ofGetElapsedTimeMillis(); 
+	startTimeCatelloo = ofGetElapsedTimeMillis();
+	string oldpost = "catelloo: X axis from column " + ofToString(m.getArgAsInt(2) + 1) + " to column " + ofToString(m.getArgAsInt(3)+1);
+	post = oldpost + "\n" + post;
       }
-      if(m.getArgAsString(0) == "opacity" && m.getNumArgs() == 2){
-	opacidadCatelloo = m.getArgAsFloat(1); 
+      
+      if(m.getArgAsString(0) == "opacity" && m.getNumArgs() == 4){
+	iniTimeDrawCatelloo = ofGetElapsedTimeMillis();
+	opaTimeCatelloo = m.getArgAsFloat(1);
+	opaIniCatelloo = m.getArgAsFloat(2);
+	opaFiniCatelloo = m.getArgAsFloat(3);
+	rampOpaCatelloo = 1; 
       }
+
+      if(m.getArgAsString(0) == "scale" && m.getNumArgs() == 2){
+	for (int i = 0;i < LIM1;i++){
+	planosCatelloo[i].set(m.getArgAsFloat(1)*100, m.getArgAsFloat(1)*100);
+	}
+      }
+      
     }
     
   }
@@ -277,7 +331,10 @@ void ofApp::update(){
 void ofApp::draw(){
  
   ofSetRectMode(OF_RECTMODE_CENTER);
-  // camera.orbit(ofGetElapsedTimef()*25, ofGetElapsedTimef()*2, camera.getDistance(), ofVec3f(0, 0, 0));
+
+  //if(orbitON == 1){
+    camera.orbit(ofGetElapsedTimef()*7, ofGetElapsedTimef()*2, camera.getDistance(), ofVec3f(0, 0, 0));
+    //}
   
   //  ofVec3f centro;
   //centro.set(500, 500, 500);
@@ -299,22 +356,23 @@ void ofApp::draw(){
   // aeforia 
 
   if(aeforiaON == 1){
-
-    /*
-    if(aeforiaFade = 1){
-      float tempTimer = ofGetElapsedTimeMillis() - inittimeDrawAeforia;
-      opacidadAeforia = ofMap(tempTimer, 0, 500, aeforiaFadeIni, aeforiaFadeOut, true );
+ 
+    if(rampOpaAeforia = 1){
+      float tempTimer = ofGetElapsedTimeMillis() - iniTimeDrawAeforia;
+      opacidadAeforia = ofMap(tempTimer, 0, opaTimeAeforia, opaIniAeforia, opaFiniAeforia, true );
     }
-    */
   
     ofSetColor(255, 255, 255, opacidadAeforia);
 
-    float timerAeforia = ofGetElapsedTimeMillis() - startTimeAeforia;  
     
     for (int i = 0;i < LIM1;i++){
+
       planosAeforia[i].lookAt(pos);
       
       if(rampONAeforia == 1){
+
+	float timerAeforia = ofGetElapsedTimeMillis() - startTimeAeforia;  
+	
 	float mapX, mapY, mapZ;
 	
 	mapX = ofMap(timerAeforia, 0, timeAeforia, ofToFloat(columnasAeforia[i][posXinAeforia]), ofToFloat(columnasAeforia[i][posXfinAeforia]), true )*4-800;
@@ -322,6 +380,7 @@ void ofApp::draw(){
 	mapZ = ofMap(timerAeforia, 0, timeAeforia, ofToFloat(columnasAeforia[i][posZinAeforia]), ofToFloat(columnasAeforia[i][posZfinAeforia]), true )*4-800;
 	
 	planosAeforia[i].setPosition(mapX, mapY, mapZ);
+	
       }
       
       aeforia[i].getTexture().bind();
@@ -338,6 +397,11 @@ void ofApp::draw(){
 
   if(aitanaON == 1){
 
+    if(rampOpaAitana = 1){
+      float tempTimer = ofGetElapsedTimeMillis() - iniTimeDrawAitana;
+      opacidadAitana = ofMap(tempTimer, 0, opaTimeAitana, opaIniAitana, opaFiniAitana, true );
+    }
+    
     float timerAitana = ofGetElapsedTimeMillis() - startTimeAitana; 
     
     ofSetColor(255, 255, 255, opacidadAitana);

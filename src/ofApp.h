@@ -62,7 +62,10 @@ public:
   float startTimeAeforia;
   float timeAeforia; 
   float posXinAeforia, posXfinAeforia, posYinAeforia, posYfinAeforia, posZinAeforia, posZfinAeforia;
-  int rampONAeforia; 
+  int rampONAeforia;
+  float opaIniAeforia, opaFiniAeforia, opaTimeAeforia, iniTimeDrawAeforia;
+  int rampOpaAeforia; 
+  //   float timerAeforia; 
   //float inittimeDrawAeforia;
   //int aeforiaFade;
   //float aeforiaFadeIni;
@@ -81,7 +84,9 @@ public:
   float timeAitana; 
   float posXinAitana, posXfinAitana, posYinAitana, posYfinAitana, posZinAitana, posZfinAitana;
   int rampONAitana;
-
+  float opaIniAitana, opaFiniAitana, opaTimeAitana, iniTimeDrawAitana;
+  int rampOpaAitana;
+  
    // catelloo
   	
   ofImage catelloo[LIM1];
@@ -94,6 +99,7 @@ public:
   float startTimeCatelloo;  
   float timeCatelloo; 
   float posXinCatelloo, posXfinCatelloo, posYinCatelloo, posYfinCatelloo, posZinCatelloo, posZfinCatelloo;
-  int rampONCatelloo; 
-  
+  int rampONCatelloo;
+  float opaIniCatelloo, opaFiniCatelloo, opaTimeCatelloo, iniTimeDrawCatelloo;
+  int rampOpaCatelloo;
 };
