@@ -17,7 +17,7 @@ void ofApp::setup(){
   font.load("fonts/PrintChar21.ttf", 12, true, true, true);
   post = "";
 
-  // lectura de archivos
+  // lectura de txt a buffers en OF
   
   bufferAeforia = ofBufferFromFile("txt/aeforia.txt");
   bufferAitana = ofBufferFromFile("txt/aitana.txt");
@@ -55,9 +55,11 @@ void ofApp::setup(){
   posZfinCatelloo = 2;
   startTimeCatelloo = ofGetElapsedTimeMillis();
   iniTimeDrawCatelloo = ofGetElapsedTimeMillis();
- 
+
+  // Split OF SC, una línea una imagen.
   // aeforia
   
+  // es como ofApp.h
   std::vector < std::string > filasAeforia = ofSplitString(bufferAeforia.getText(), " ");
 
   for (int i = 0;i < LIM1;i++){
@@ -171,6 +173,11 @@ void ofApp::update(){
 
     if (m.getAddress() == "/camSetDistance"  &&  m.getNumArgs() ==1 ){
       camera.setDistance(m.getArgAsFloat(0)); 
+    }
+
+    if (m.getAddress() == "/genericMsg"  &&  m.getNumArgs() ==1 ){
+      string oldpost = ofToString(m.getArgAsFloat(0));
+      post = oldpost + "\n" + post;
     }
 
     // Aeforia
@@ -332,9 +339,9 @@ void ofApp::draw(){
  
   ofSetRectMode(OF_RECTMODE_CENTER);
 
-  //if(orbitON == 1){
-    camera.orbit(ofGetElapsedTimef()*7, ofGetElapsedTimef()*2, camera.getDistance(), ofVec3f(0, 0, 0));
-    //}
+  if(orbitON == 1){
+    camera.orbit(orbitX, orbitY, camera.getDistance(), ofVec3f(0, 0, 0));
+  }
   
   //  ofVec3f centro;
   //centro.set(500, 500, 500);

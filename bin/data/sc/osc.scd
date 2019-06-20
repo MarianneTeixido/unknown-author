@@ -1,27 +1,27 @@
 // Local network
 
-m = NetAddr("127.0.0.1", 5612)
+m = NetAddr("127.0.0.1", 5612);
 
 // Aeforia example
 
 m.sendMsg("/aeforia", "draw");
 m.sendMsg("/aeforia", "clear");
-m.sendMsg("/aeforia", "setTransition", 10000, 0, 1, 1, 2, 2, 0);
-m.sendMsg("/aeforia", "setTransition", 25000, 1, 0, 2, 1, 0, 2);
+m.sendMsg("/aeforia", "setTransition", 50000, 0, 1, 1, 2, 2, 0);
+m.sendMsg("/aeforia", "setTransition", 50000, 1, 0, 2, 1, 0, 2);
 m.sendMsg("/aeforia", "opacity", 5000, 0, 200);
 m.sendMsg("/aeforia", "opacity", 2000, 255, 0);
-m.sendMsg("/aeforia", "scale", 4);
+m.sendMsg("/aeforia", "scale", 0.5);
 
 
 // Aitana example
 
 m.sendMsg("/aitana", "draw");
 m.sendMsg("/aitana", "clear");
-m.sendMsg("/aitana", "setTransition", 10000, 0, 1, 1, 2, 2, 0);
-m.sendMsg("/aitana", "setTransition", 20000, 1, 0, 2, 1, 0, 2);
-m.sendMsg("/aitana", "opacity", 10000, 0, 255);
+m.sendMsg("/aitana", "setTransition", 50000, 0, 1, 1, 2, 2, 0);
+m.sendMsg("/aitana", "setTransition", 50000, 1, 0, 2, 1, 0, 2);
+m.sendMsg("/aitana", "opacity", 10000, 0, 200);
 m.sendMsg("/aitana", "opacity", 10000, 255, 0);
-m.sendMsg("/aitana", "scale", 1);
+m.sendMsg("/aitana", "scale", 0.5);
 
 
 // Catelloo example
@@ -30,7 +30,7 @@ m.sendMsg("/catelloo", "draw");
 m.sendMsg("/catelloo", "clear");
 m.sendMsg("/catelloo", "setTransition", 10000, 0, 1, 1, 2, 2, 0);
 m.sendMsg("/catelloo", "setTransition", 20000, 1, 0, 2, 1, 0, 2);
-m.sendMsg("/catelloo", "opacity", 10000, 0, 255);
+m.sendMsg("/catelloo", "opacity", 10000, 0, 200);
 m.sendMsg("/catelloo", "opacity", 10000, 255, 0);
 m.sendMsg("/catelloo", "scale", 1);
 
@@ -60,14 +60,16 @@ h = Array.fill(400, { arg i; x[i][7].split($ ) });
 // Sound
 
 
-Tdef(\x, { loop { m.sendMsg("/aeforia", "opacity", 8000, 20, 200); 8.wait; m.sendMsg("/aeforia", "opacity", 8000, 200, 20); 8.wait;} }); // oldSchool Live Coding
+Tdef(\x, { loop { m.sendMsg("/aeforia", "opacity", 8000, 20, 200); m.sendMsg("/genericMsg", "aeforia opacity set to: 200");
+8.wait; m.sendMsg("/aeforia", "opacity", 8000, 200, 20); m.sendMsg("/genericMsg", "aeforia opacity set to: 20"); 8.wait;} }); // oldSchool Live Coding
 
-Tdef(\y, { loop { m.sendMsg("/aitana", "opacity", 4000, 200, 20); 8.wait; m.sendMsg("/aitana", "opacity", 4000, 20, 200); 8.wait;} }); // oldSchool Live Coding
+Tdef(\y, { loop { m.sendMsg("/aitana", "opacity", 4000, 200, 20); m.sendMsg("/genericMsg", "aitana opacity set to: 200"); 8.wait; m.sendMsg("/aitana", "opacity", 4000, 20, 200); m.sendMsg("/genericMsg", "aitana opacity set to: 200"); 8.wait;} }); // oldSchool Live Coding
 
 Tdef(\x).stop;
 Tdef(\x).play;
 
 Tdef(\y).play;
+Tdef(\y).stop;
 
 ~pmX = {Pan2.ar(PMOsc.ar(Lag.kr(Demand.kr(Impulse.kr(~tempo*0.125), 0, Dseq(a.flatten.asInteger, inf)) * [1, 1.01], 0),Lag.kr(Demand.kr(Impulse.kr(~tempo*0.125), 0, Dseq(b.flatten.asInteger*2, inf))* [1, 1.01], 0), Lag.kr(Demand.kr(Impulse.kr(~tempo*0.5), 0, Dseq([0.1, 1, 14, 0.1], inf)), 32),0,0.125/4))};
 
@@ -97,6 +99,29 @@ s.meter
 ~sinZ.play
 
 s.meter
+
+// Camera
+
+(
+OSCdef(\orbitX, {|msg|
+	var data = msg[3];
+	m.sendMsg("/camOrbitX", data);
+	//m.sendMsg("/genericMsg", msg[3].asFloat);
+}, '/orbitXDef');
+~orbitX = {Lag.kr(Demand.kr(Impulse.kr(~tempo*0.125/4), 0, Drand([10, 900, -200, -1000, 400, 100, -100]*0.125,inf)), 14)};
+~orbitXSend = {SendReply.kr(Impulse.kr(60), '/orbitXDef', ~orbitX.kr)};
+//OSCdef(\orbitX).free;
+)
+
+(
+OSCdef(\orbitY, {|msg|
+	var data = msg[3];
+	m.sendMsg("/camOrbitY", data);
+}, '/orbitYDef');
+~orbitY = {Lag.kr(Demand.kr(Impulse.kr(~tempo*0.125/2), 0, Drand([10, 40, -20, 100, 300]*0.125,inf)), 14)};
+~orbitYSend = {SendReply.kr(Impulse.kr(120), '/orbitYDef', ~orbitY.kr)};
+//OSCdef(\orbitY).free;
+)
 
 
 // Test Database
