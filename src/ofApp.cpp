@@ -203,6 +203,7 @@ void ofApp::update(){
 	//inittimeDrawAeforia = ofGetElapsedTimeMillis();
 	//ofSleepMillis(500);
 	aeforiaON = 0;
+	aeforiaMesh = 0; 
 	string oldpost = "aeforia: clear";
 	post = oldpost + "\n" + post;
       }
@@ -268,12 +269,14 @@ void ofApp::update(){
 
       if(m.getArgAsString(0) == "draw"  && m.getNumArgs() == 1){
 	aitanaON = 1;
+	aitanaMesh = 0; 
 	string oldpost = "aitana_basquiat: draw";
 	post = oldpost + "\n" + post;
       }
       
       if(m.getArgAsString(0) == "clear"  && m.getNumArgs() == 1){
 	aitanaON = 0;
+	aitanaMesh = 0; 
 	string oldpost = "aitana_basquiat: clear";
 	post = oldpost + "\n" + post;
       }
@@ -305,7 +308,31 @@ void ofApp::update(){
 	  planosAitana[i].set(m.getArgAsFloat(1)*100, m.getArgAsFloat(1)*100);
 	}
       }
-      
+
+       if(m.getArgAsString(0) == "imgToMesh" ){
+	aitanaMesh = 1;
+	aitanaON = 0;
+	glPointSize(1); 
+
+	for (int i = 0;i < LIM2;i++){
+	  meshAitana[i].setMode(OF_PRIMITIVE_POINTS);
+	  // loop through the image in the x and y axes
+	  int skip = 4; // load a subset of the points
+	  for(aitanaY[i] = 0; aitanaY[i] < aitana_basquiat[i].getHeight(); aitanaY[i] += skip) {
+	    for(aitanaX[i] = 0; aitanaX[i] < aitana_basquiat[i].getWidth(); aitanaX[i] += skip) {
+	      curAitana[i] = aitana_basquiat[i].getColor(aitanaX[i], aitanaY[i]);
+	      if(curAitana[i].a > 0) {
+		// the alpha value encodes depth, let's remap it to a good depth range
+		aitanaZ[i] = ofMap(curAitana[i].a, 0, 255, -300, 300);
+		curAitana[i].a = 255;
+		meshAitana[i].addColor(curAitana[i]);
+		posAitana[i].set(aitanaX[i], aitanaY[i], aitanaZ[i]);
+		meshAitana[i].addVertex(posAitana[i]);
+	      }
+	    }
+	  }
+	}
+       }
     }
 
     // Catelloo
@@ -314,12 +341,14 @@ void ofApp::update(){
 
       if(m.getArgAsString(0) == "draw"  && m.getNumArgs() == 1){
 	catellooON = 1;
+	catellooMesh = 0; 
 	string oldpost = "catelloo: draw";
 	post = oldpost + "\n" + post;
       }
       
       if(m.getArgAsString(0) == "clear"  && m.getNumArgs() == 1){
 	catellooON = 0;
+	catellooMesh = 0; 
 	string oldpost = "catelloo: clear";
 	post = oldpost + "\n" + post;
       }
@@ -351,9 +380,32 @@ void ofApp::update(){
 	planosCatelloo[i].set(m.getArgAsFloat(1)*100, m.getArgAsFloat(1)*100);
 	}
       }
-      
+
+      if(m.getArgAsString(0) == "imgToMesh" ){
+	catellooMesh = 1;
+	catellooON = 0;
+	glPointSize(1); 
+	
+	for (int i = 0;i < LIM2;i++){
+	  meshCatelloo[i].setMode(OF_PRIMITIVE_POINTS);
+	  // loop through the image in the x and y axes
+	  int skip = 4; // load a subset of the points
+	  for(catellooY[i] = 0; catellooY[i] < catelloo[i].getHeight(); catellooY[i] += skip) {
+	    for(catellooX[i] = 0; catellooX[i] < catelloo[i].getWidth(); catellooX[i] += skip) {
+	      curCatelloo[i] = catelloo[i].getColor(catellooX[i], catellooY[i]);
+	      if(curCatelloo[i].a > 0) {
+		// the alpha value encodes depth, let's remap it to a good depth range
+		catellooZ[i] = ofMap(curCatelloo[i].a, 0, 255, -300, 300);
+		curCatelloo[i].a = 255;
+		meshCatelloo[i].addColor(curCatelloo[i]);
+		posCatelloo[i].set(catellooX[i], catellooY[i], catellooZ[i]);
+		meshCatelloo[i].addVertex(posCatelloo[i]);
+	      }
+	    }
+	  }
+	}
+      }     
     }
-    
   }
 }
 
@@ -396,6 +448,38 @@ void ofApp::draw(){
       //mesh[i].lookAt(pos); 
 
       mesh[i].draw();
+    }
+  }
+
+    // aitana
+
+  if(aitanaMesh == 1){
+    ofSetRectMode(OF_RECTMODE_CENTER);
+
+    for (int i = 0;i < LIM2;i++){
+
+      ofTranslate((ofNoise(i/1.2)-0.5)*1000+2,
+		  (ofNoise(i/6.1)-0.5)*1000+2,
+		  (ofNoise(i/4.2)-0.5)*1000+2);
+      //mesh[i].lookAt(pos); 
+
+      meshAitana[i].draw();
+    }
+  }
+
+  // catelloo
+
+  if(catellooMesh == 1){
+    ofSetRectMode(OF_RECTMODE_CENTER);
+
+    for (int i = 0;i < LIM1;i++){
+
+      ofTranslate((ofNoise(i/1.2)-0.5)*1000+2,
+		  (ofNoise(i/6.1)-0.5)*1000+2,
+		  (ofNoise(i/4.2)-0.5)*1000+2);
+      //mesh[i].lookAt(pos); 
+
+      meshCatelloo[i].draw();
     }
   }
 

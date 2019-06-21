@@ -6,11 +6,13 @@ m = NetAddr("127.0.0.1", 5612);
 
 m.sendMsg("/aeforia", "draw");
 m.sendMsg("/aeforia", "clear");
-m.sendMsg("/aeforia", "setTransition", 50000, 0, 1, 1, 2, 2, 0);
-m.sendMsg("/aeforia", "setTransition", 50000, 1, 0, 2, 1, 0, 2);
+m.sendMsg("/aeforia", "setTransition", 5000, 0, 1, 1, 2, 2, 0);
+m.sendMsg("/aeforia", "setTransition", 5000, 1, 0, 2, 1, 0, 2);
 m.sendMsg("/aeforia", "opacity", 5000, 0, 200);
 m.sendMsg("/aeforia", "opacity", 2000, 255, 0);
-m.sendMsg("/aeforia", "scale", 0.5);
+m.sendMsg("/aeforia", "scale", 0.125/2);
+m.sendMsg("/aeforia", "imgToMesh");
+
 
 
 // Aitana example
@@ -108,9 +110,11 @@ OSCdef(\orbitX, {|msg|
 	m.sendMsg("/camOrbitX", data);
 	//m.sendMsg("/genericMsg", msg[3].asFloat);
 }, '/orbitXDef');
-~orbitX = {Lag.kr(Demand.kr(Impulse.kr(~tempo*0.125/4), 0, Drand([10, 900, -200, -1000, 400, 100, -100]*0.125,inf)), 14)};
+~orbitX = {Lag.kr(Demand.kr(Impulse.kr(~tempo*0.125), 0, Drand([10, 900, -200, -1000, 400, 100, -100]*0.125,inf)), 14)};
 ~orbitXSend = {SendReply.kr(Impulse.kr(60), '/orbitXDef', ~orbitX.kr)};
-//OSCdef(\orbitX).free;
+//
+
+OSCdef(\orbitX).free;
 )
 
 (

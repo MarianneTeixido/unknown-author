@@ -73,6 +73,7 @@ public:
   int aeforiaY[LIM1];
   int aeforiaX[LIM1];
   float aeforiaZ[LIM1];
+  int aeforiaMesh;
   
   //   float timerAeforia; 
   //float inittimeDrawAeforia;
@@ -95,8 +96,15 @@ public:
   int rampONAitana;
   float opaIniAitana, opaFiniAitana, opaTimeAitana, iniTimeDrawAitana;
   int rampOpaAitana;
-  int aeforiaMesh;
-  
+  int aitanaMesh; 
+
+  ofMesh meshAitana[LIM2];
+  ofColor curAitana[LIM2];
+  ofVec3f posAitana[LIM2];
+  int aitanaY[LIM2];
+  int aitanaX[LIM2];
+  float aitanaZ[LIM2];
+
    // catelloo
   	
   ofImage catelloo[LIM1];
@@ -112,4 +120,12 @@ public:
   int rampONCatelloo;
   float opaIniCatelloo, opaFiniCatelloo, opaTimeCatelloo, iniTimeDrawCatelloo;
   int rampOpaCatelloo;
+
+  ofMesh meshCatelloo[LIM1];
+  ofColor curCatelloo[LIM1];
+  ofVec3f posCatelloo[LIM1];
+  int catellooY[LIM1];
+  int catellooX[LIM1];
+  float catellooZ[LIM1];
+  int catellooMesh; 
 };
