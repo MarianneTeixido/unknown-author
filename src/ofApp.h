@@ -12,6 +12,7 @@ public:
   void setup();
   void update();
   void draw();
+  void drawMesh(); 
   
   void keyPressed(int key);
   void keyReleased(int key);
@@ -56,6 +57,7 @@ public:
 
   ofPlanePrimitive planosAeforia[LIM1];
   std::vector < std::string > columnasAeforia[LIM1];
+  ofVboMesh planosMesh[LIM1]; // para modificar planos
   
   int aeforiaON;
   float opacidadAeforia;
@@ -64,7 +66,14 @@ public:
   float posXinAeforia, posXfinAeforia, posYinAeforia, posYfinAeforia, posZinAeforia, posZfinAeforia;
   int rampONAeforia;
   float opaIniAeforia, opaFiniAeforia, opaTimeAeforia, iniTimeDrawAeforia;
-  int rampOpaAeforia; 
+  int rampOpaAeforia;
+  ofMesh mesh[LIM1];
+  ofColor cur[LIM1];
+  ofVec3f pos[LIM1];
+  int aeforiaY[LIM1];
+  int aeforiaX[LIM1];
+  float aeforiaZ[LIM1];
+  
   //   float timerAeforia; 
   //float inittimeDrawAeforia;
   //int aeforiaFade;
@@ -86,6 +95,7 @@ public:
   int rampONAitana;
   float opaIniAitana, opaFiniAitana, opaTimeAitana, iniTimeDrawAitana;
   int rampOpaAitana;
+  int aeforiaMesh;
   
    // catelloo
   	

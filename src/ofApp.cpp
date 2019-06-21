@@ -55,7 +55,7 @@ void ofApp::setup(){
   posZfinCatelloo = 2;
   startTimeCatelloo = ofGetElapsedTimeMillis();
   iniTimeDrawCatelloo = ofGetElapsedTimeMillis();
-
+ 
   // Split OF SC, una línea una imagen.
   // aeforia
   
@@ -188,6 +188,7 @@ void ofApp::update(){
 	aeforiaON = 1;
 	string oldpost = "aeforia: draw";
 	post = oldpost + "\n" + post;
+	aeforiaMesh = 0; 
 	//inittimeDrawAeforia = ofGetElapsedTimeMillis();
 	//aeforiaFadeIni = 255;
 	//aeforiaFadeOut = 1;
@@ -229,13 +230,36 @@ void ofApp::update(){
 	opaFiniAeforia = m.getArgAsFloat(3);
 	rampOpaAeforia = 1; 
       }
-
+      
       if(m.getArgAsString(0) == "scale" && m.getNumArgs() == 2){
 	for (int i = 0;i < LIM1;i++){
-	planosAeforia[i].set(m.getArgAsFloat(1)*100, m.getArgAsFloat(1)*100);
+	  planosAeforia[i].set(m.getArgAsFloat(1)*100, m.getArgAsFloat(1)*100);
 	}
       }
-      
+
+      if(m.getArgAsString(0) == "imgToMesh" ){
+	aeforiaMesh = 1;
+	aeforiaON = 0;
+	glPointSize(1); 
+	for (int i = 0;i < LIM1;i++){
+	  mesh[i].setMode(OF_PRIMITIVE_POINTS);
+	  // loop through the image in the x and y axes
+	  int skip = 4; // load a subset of the points
+	  for(aeforiaY[i] = 0; aeforiaY[i] < aeforia[i].getHeight(); aeforiaY[i] += skip) {
+	    for(aeforiaX[i] = 0; aeforiaX[i] < aeforia[i].getWidth(); aeforiaX[i] += skip) {
+	      cur[i] = aeforia[i].getColor(aeforiaX[i], aeforiaY[i]);
+	      if(cur[i].a > 0) {
+		// the alpha value encodes depth, let's remap it to a good depth range
+		aeforiaZ[i] = ofMap(cur[i].a, 0, 255, -300, 300);
+		cur[i].a = 255;
+		mesh[i].addColor(cur[i]);
+		pos[i].set(aeforiaX[i], aeforiaY[i], aeforiaZ[i]);
+		mesh[i].addVertex(pos[i]);
+	      }
+	    }
+	  }
+	}
+      }
     }
 
     // Aitana
@@ -332,7 +356,6 @@ void ofApp::update(){
     
   }
 }
-  
 
 //--------------------------------------------------------------
 void ofApp::draw(){
@@ -360,7 +383,21 @@ void ofApp::draw(){
 
   camera.begin();
 
-  // aeforia 
+  // aeforia
+
+  if(aeforiaMesh == 1){
+    ofSetRectMode(OF_RECTMODE_CENTER);
+
+    for (int i = 0;i < LIM1;i++){
+
+      ofTranslate((ofNoise(i/1.2)-0.5)*1000+2,
+		  (ofNoise(i/6.1)-0.5)*1000+2,
+		  (ofNoise(i/4.2)-0.5)*1000+2);
+      //mesh[i].lookAt(pos); 
+
+      mesh[i].draw();
+    }
+  }
 
   if(aeforiaON == 1){
  
